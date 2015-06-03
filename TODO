@@ -1,3 +1,6 @@
+Wed Jun  3 15:49:38 CDT 2015
+    - Use getopt module to processs options.
+
 Wed Jun  3 01:16:43 CDT 2015
     - Add menu handling module.
     - Implement status: available, downloaded.
