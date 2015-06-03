@@ -35,15 +35,13 @@ class Config:
     def __init__( self, filename ):
         # Check if file exists.
         if not os.path.isfile( filename ):
-            print( "(EE) Config file doesn't exist, or there's not access to it:", filename, file=sys.stderr  )
-            raise ValueError
+            raise FileNotFoundError( "RSS_E01","Config file doesn't exist, or there's not access to it: " + filename)
 
         self.filename = filename
         try:
             config_fp = open( self.filename, "r" )
-        except:
-            print( "(EE) Can't open config file:", self.filename, file=sys.stderr  )
-            raise ValueError
+        except Exception as e:
+            raise PermissionError( "RSS_E02", "Can't open config file: " + self.filename + "\n" + str( e) )
 
         config = []
 
@@ -51,6 +49,8 @@ class Config:
         # Format:
         # feedname url directory
         line_number = 0
+        warning_msg = ""
+
         for line in config_fp:
             line_number += 1
 
@@ -69,7 +69,11 @@ class Config:
                 entry     = {'name' : feed_name, 'url' : feed_url, 'dir' : feed_dir}
                 config.append( entry )
             else:
-                print("(WW) Config file, ignoring line#", line_number, ": ", line, sep="", end="", file=sys.stderr )
+                warning_msg += "  ignoring line #" + str(line_number) + ": " + line
+
+        # Include warnings on the object.
+        if warning_msg != "":
+            self.warnings = "Warning (RSS_W01): config file syntax error:\n" + warning_msg
 
         config_fp.close()
         self.list = config
@@ -91,8 +95,12 @@ def main( argv ):
     # Create config object and load the file.
     try:
         feed_config = Config( CONFIG_FILE )
-    except:
+    except Exception as e:
+        print( e, file=sys.stderr)
         return
+    else:
+        if hasattr( feed_config, "warnings"):
+            print( feed_config.warnings, file=sys.stderr)
 
     print( feed_config, end="" )
     return
