@@ -56,3 +56,8 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Editor's temporary files
+*~
+*.swp
+*.swo
