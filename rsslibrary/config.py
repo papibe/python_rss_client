@@ -108,7 +108,7 @@ class Config:
                 try:
                     os.makedirs( directory )
                 except Exception as e:
-                    print( "Error (RSS_E03): can't create feed directory '", directory, "'.", sep="", file=sys.stderr)
+                    raise PermissionError( "RSS_E02", "can't create feed directory '" + directory+ "'.\n" + str( e ) )
 
 
 def main( argv ):

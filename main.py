@@ -32,10 +32,14 @@ def main( argv ):
 
     #print( feed_config, end="" )
 
-    msg = feed_config.check_directories()
-    if msg != "":
-        print( msg, end="", file=sys.stderr)
-    #feed_config.create_directories()
+    #msg = feed_config.check_directories()
+    #if msg != "":
+        #print( msg, end="", file=sys.stderr)
+    try:
+        feed_config.create_directories()
+    except Exception as e:
+        print( e, file=sys.stderr)
+        return
 
     return
 
