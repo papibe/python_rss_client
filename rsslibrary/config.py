@@ -71,7 +71,7 @@ class Config:
 
         # Include warnings on the object.
         if warning_msg != "":
-            self.warnings = "Warning (RSS_W01): config file syntax error:\n" + warning_msg
+            self.warnings = "[Warning RSS_W01]: config file syntax error:\n" + warning_msg
 
         config_fp.close()
         self.list = config
@@ -92,10 +92,23 @@ class Config:
 
     # Check directories.
     def check_directories( self ):
+        message = ""
         for feed in self.list:
             directory = feed['dir']
             if not os.path.isdir( directory):
-                print( "Warning (RSS_W02): feed directory doesn't exist: '", directory, "'.", sep="", file=sys.stderr)
+                message +=  "[Warning RSS_W02]: feed directory doesn't exist: '" + directory +  "'.\n"
+        return message
+
+
+    # Create feed directories specified on config.conf
+    def create_directories( self ):
+        for feed in self.list:
+            directory = feed['dir']
+            if not os.path.isdir( directory):
+                try:
+                    os.makedirs( directory )
+                except Exception as e:
+                    print( "Error (RSS_E03): can't create feed directory '", directory, "'.", sep="", file=sys.stderr)
 
 
 def main( argv ):

@@ -30,9 +30,12 @@ def main( argv ):
         if hasattr( feed_config, "warnings"):
             print( feed_config.warnings, file=sys.stderr)
 
-    print( feed_config, end="" )
+    #print( feed_config, end="" )
 
-    feed_config.check_directories()
+    msg = feed_config.check_directories()
+    if msg != "":
+        print( msg, end="", file=sys.stderr)
+    #feed_config.create_directories()
 
     return
 
