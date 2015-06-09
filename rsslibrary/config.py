@@ -89,6 +89,15 @@ class Config:
     
         return output
 
+
+    # Check directories.
+    def check_directories( self ):
+        for feed in self.list:
+            directory = feed['dir']
+            if not os.path.isdir( directory):
+                print( "Warning (RSS_W02): feed directory doesn't exist: '", directory, "'.", sep="", file=sys.stderr)
+
+
 def main( argv ):
     # Create config object and load the file.
     try:

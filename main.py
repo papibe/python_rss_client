@@ -31,6 +31,9 @@ def main( argv ):
             print( feed_config.warnings, file=sys.stderr)
 
     print( feed_config, end="" )
+
+    feed_config.check_directories()
+
     return
 
 if __name__ == "__main__":
