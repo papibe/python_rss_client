@@ -19,6 +19,8 @@ import re
 import feedparser
 import os
 import sys
+import http.client
+from urllib.parse import urlparse
 
 # Global variables
 CONFIG_FILE  = "/home/pablo/etc/rss/config.conf" # List of RSS feeds and working directories.
@@ -89,6 +91,25 @@ class Config:
     
         return output
 
+    def check_feed_url( self, url_address ):
+
+        url_parsed = urlparse( url_address )
+        print( "\tLocation     :\t", url_parsed.netloc )
+        print( "\tPath         :\t", url_parsed.path )
+
+        http_conn = http.client.HTTPConnection( url_parsed.netloc )
+        http_conn.request('HEAD', url_parsed.path )
+        http_resp = http_conn.getresponse()
+
+        print( "\tHTTP response:\t", http_resp.status, http_resp.reason )
+        return
+
+    def check_feed_urls( self ):
+        for feed in self.list:
+            url_address = feed['url']
+            print(feed['name'])
+            self.check_feed_url( url_address)
+        return
 
     # Check directories.
     def check_directories( self ):
